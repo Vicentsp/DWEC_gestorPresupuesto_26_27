@@ -5,14 +5,17 @@
 
 function actualizarPresupuesto() {
     // TODO
+    let presupuesto = 0;
 }
 
 function mostrarPresupuesto() {
     // TODO
+    let presupuesto = 0;
 }
 
 function CrearGasto() {
     // TODO
+    let presupuesto = 0;
 }
 
 // NO MODIFICAR A PARTIR DE AQUÍ: exportación de funciones y objetos creados para poder ejecutar los tests.

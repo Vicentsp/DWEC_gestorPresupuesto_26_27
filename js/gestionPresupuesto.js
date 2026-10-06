@@ -27,7 +27,7 @@ function mostrarPresupuesto() {
     
 }
 
-function CrearGasto(descripcion, valor) { 
+function CrearGasto(descripcion, valor, fecha, ...etiquetas) { 
     this.descripcion = String(descripcion);
 
     if(typeof valor === "number" && Number.isFinite(valor) && valor >= 0 )
@@ -38,14 +38,50 @@ function CrearGasto(descripcion, valor) {
         this.valor = 0;
     }
 
+    if (
+    typeof fecha === "string" && !Number.isNaN(Date.parse(fecha))) 
+    {
+    this.fecha = Date.parse(fecha);
+    } 
+    else {
+    this.fecha = Date.now();
+    }
+
+    this.etiquetas = [];
+
     this.mostrarGasto = function () {
     return "Gasto correspondiente a " + this.descripcion +
            " con valor " + this.valor + " €";
     }
+
+    this.mostrarGastoCompleto = function () {
+    let texto = this.mostrarGasto() + ".";
+    texto += "\nFecha: " + new Date(this.fecha).toLocaleString();
+    texto += "\nEtiquetas:";
+
+    for (let etiqueta of this.etiquetas) {
+        texto += "\n- " + etiqueta;
+    }
+    texto += "\n";
+    return texto;
+};
     
     this.actualizarDescripcion = function (nuevaDescripcion) {
     this.descripcion = String(nuevaDescripcion);
+
+    };
+
+this.anyadirEtiquetas = function (...nuevasEtiquetas) {
+    for (let etiqueta of nuevasEtiquetas) {
+        if (!this.etiquetas.includes(etiqueta)) {
+            this.etiquetas.push(etiqueta);
+        }
+    }
 };
+
+this.anyadirEtiquetas(...etiquetas);
+
+
 
 this.actualizarValor = function (nuevoValor) {
     if (
@@ -54,6 +90,25 @@ this.actualizarValor = function (nuevoValor) {
         nuevoValor >= 0
     ) {
         this.valor = nuevoValor;
+    }
+};
+
+this.actualizarFecha = function (nuevaFecha) {
+    if (
+        typeof nuevaFecha === "string" &&
+        !Number.isNaN(Date.parse(nuevaFecha))
+    ) {
+        this.fecha = Date.parse(nuevaFecha);
+    }
+};
+
+this.borrarEtiquetas = function (...etiquetasBorrar) {
+    for (let etiqueta of etiquetasBorrar) {
+        let posicion = this.etiquetas.indexOf(etiqueta);
+
+        if (posicion !== -1) {
+            this.etiquetas.splice(posicion, 1);
+        }
     }
 };
 

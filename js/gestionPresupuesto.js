@@ -243,8 +243,36 @@ function filtrarGastos(filtros = {}){
     return gastosFiltrados;
 }
 
-function agruparGastos(){
+function agruparGastos( periodo = "mes", etiquetas = [],fechaDesde,fechaHasta) {
+    let filtros = {};
 
+    if (etiquetas.length > 0) {
+        filtros.etiquetasTiene = etiquetas;
+    }
+
+    if (fechaDesde !== undefined) {
+        filtros.fechaDesde = fechaDesde;
+    }
+
+    if (fechaHasta !== undefined) {
+        filtros.fechaHasta = fechaHasta;
+    } else {
+        filtros.fechaHasta = new Date().toISOString();
+    }
+
+    let gastosFiltrados = filtrarGastos(filtros);
+
+    return gastosFiltrados.reduce(function (acumulador, gasto) {
+        let periodoGasto = gasto.obtenerPeriodoAgrupacion(periodo);
+
+        if (acumulador[periodoGasto] === undefined) {
+            acumulador[periodoGasto] = 0;
+        }
+
+        acumulador[periodoGasto] += gasto.valor;
+
+        return acumulador;
+    }, {});
 }
 
 // NO MODIFICAR A PARTIR DE AQUÍ: exportación de funciones y objetos creados para poder ejecutar los tests.

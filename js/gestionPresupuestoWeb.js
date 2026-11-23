@@ -89,6 +89,40 @@ elemento.appendChild(agrupacion)
 
 }
 
+function repintar(){
+    let presupuesto = gestionPresupuesto.mostrarPresupuesto();
+    mostrarDatoEnId("presupuesto",presupuesto);
+
+    let totalGastos = gestionPresupuesto.calcularTotalGastos();
+    mostrarDatoEnId("gastos-totales",totalGastos);
+
+    let balance = gestionPresupuesto.calcularBalance();
+    mostrarDatoEnId("balance-total",balance);
+
+    let listado = document.getElementById("listado-gastos-completo")
+    listado.innerHTML = "";
+
+    let gastos = gestionPresupuesto.listarGastos();
+
+    for(let gasto of gastos) {
+        mostrarGastoWeb("listado-gastos-completo",gasto)
+    }
+}
+
+function actualizarPresupuestoWeb(){
+    let nuevoPresupuesto = promp("Introduce el nuevo presupuesto");
+
+    nuevoPresupuesto = Number(nuevoPresupuesto);
+gestionPresupuesto.actualizarPresupuesto(nuevoPresupuesto);
+
+repintar();
+}
+
+let botonActualizarPresupuesto = document.getElementById("actualizarpresupuesto")
+
+botonActualizarPresupuesto.addEventListener("click",actualizarPresupuestoWeb);
+
+
 
 export{
     mostrarDatoEnId,

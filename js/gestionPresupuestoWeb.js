@@ -27,14 +27,6 @@ function mostrarGastoWeb(idElemento,gasto){
     let contenedorEtiquetas = document.createElement("div");
     contenedorEtiquetas.className = "gasto-etiquetas";
 
-    for(let etiqueta of gasto.etiquetas){
-        let contenedorGastoEtiqueta = document.createElement("span");
-        contenedorGastoEtiqueta.className = "gasto-etiquetas-etiqueta";
-        contenedorGastoEtiqueta.textContent = etiqueta;
-
-        contenedorEtiquetas.appendChild(contenedorGastoEtiqueta);
-    }
-
     contenedorGasto.appendChild(contenedorGastoDescripcion);
     contenedorGasto.appendChild(contenedorGastoFecha);
     contenedorGasto.appendChild(contenedorGastoValor);
@@ -61,6 +53,25 @@ function mostrarGastoWeb(idElemento,gasto){
     botonBorrar.addEventListener("click", manejadorBorrar);
 
     contenedorGasto.appendChild(botonBorrar);
+
+    for (let etiqueta of gasto.etiquetas) {
+    let contenedorGastoEtiqueta = document.createElement("span");
+
+    contenedorGastoEtiqueta.className =
+        "gasto-etiquetas-etiqueta";
+
+    contenedorGastoEtiqueta.textContent = etiqueta;
+
+    let manejadorBorrarEtiqueta =
+        new BorrarEtiquetasHandle(gasto, etiqueta);
+
+    contenedorGastoEtiqueta.addEventListener(
+        "click",
+        manejadorBorrarEtiqueta
+    );
+
+    contenedorEtiquetas.appendChild(contenedorGastoEtiqueta);
+}
     
     elemento.appendChild(contenedorGasto);
     
@@ -205,6 +216,16 @@ function BorrarHandle(gasto) {
 
     this.handleEvent = function () {
         gestionPresupuesto.borrarGasto(this.gasto.id);
+        repintar();
+    };
+}
+
+function BorrarEtiquetasHandle(gasto, etiqueta) {
+    this.gasto = gasto;
+    this.etiqueta = etiqueta;
+
+    this.handleEvent = function () {
+        this.gasto.borrarEtiquetas(this.etiqueta);
         repintar();
     };
 }
